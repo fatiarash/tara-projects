@@ -14,34 +14,47 @@ import MarketUpdate from "./market-update/market-update";
 function HomePage() {
   const [ethereumData, setEthereumData] = useState([]);
   const [bitcoinData, setBitcoinData] = useState([]);
-
-  const fetchEthereumData = async () => {
-    const { data } = await axios.get(`${BASE_URL}ethereum&vs_currencies=usd`);
-    return setEthereumData(data?.ethereum?.usd);
-  };
-
-  const fetchBitcoinData = async () => {
-    const { data } = await axios.get(`${BASE_URL}bitcoin&vs_currencies=usd`);
-    return setBitcoinData(data?.bitcoin?.usd);
-  };
+  const [loading, setLoading] = useState(true);
+  const [loadingBtc, setLoadingBtc] = useState(true);
 
   useEffect(() => {
+    const fetchBitcoinData = async () => {
+      setLoadingBtc(true);
+      try {
+        const { data: response } = await axios.get(
+          `${BASE_URL}bitcoin&vs_currencies=usd`
+        );
+        setBitcoinData(response && response.bitcoin && response.bitcoin.usd);
+      } catch (error) {
+        console.error(error.message);
+      }
+      setLoadingBtc(false);
+    };
+
+    fetchBitcoinData();
+    setTimeout(() => setBitcoinData(fetchBitcoinData()), 10000);
+    if (!bitcoinData) return "loading...";
+    return () => clearTimeout(bitcoinData);
+  }, []);
+
+  useEffect(() => {
+    const fetchEthereumData = async () => {
+      setLoading(true);
+      try {
+        const { data: response } = await axios.get(
+          `${BASE_URL}ethereum&vs_currencies=usd`
+        );
+        setEthereumData(response && response.ethereum && response.ethereum.usd);
+      } catch (error) {
+        console.error(error.message);
+      }
+      setLoading(false);
+    };
     fetchEthereumData();
     setTimeout(() => setEthereumData(fetchEthereumData()), 10000);
     if (!ethereumData) return "loading...";
     return () => clearTimeout(ethereumData);
-  }, [ethereumData]);
-
-  useEffect(() => {
-    fetchBitcoinData();
-    setTimeout(() => setBitcoinData(fetchBitcoinData()), 10000);
-    if (!bitcoinData
-      ) return "loading...";
-    return () => clearTimeout(bitcoinData);
-  }, [bitcoinData]);
-
-  console.log(ethereumData, "data");
-  console.log(bitcoinData, "data");
+  }, []);
 
   return (
     <div className={"relative px-[92px] pb-16"}>
@@ -68,7 +81,12 @@ function HomePage() {
       <Navbar />
       <GetStart />
       <MarketTrend />
-      <MarketUpdate ethereumData={ethereumData} bitcoinData={bitcoinData} />
+      <MarketUpdate
+        ethereumData={ethereumData}
+        bitcoinData={bitcoinData}
+        loading={loading}
+        loadingBtc={loadingBtc}
+      />
       <Footer />
     </div>
   );

@@ -42,9 +42,7 @@ function MarketTrend() {
     return (
       <div
         key={`coin${index}`}
-        className={
-          "w-[297px] rounded-[18px] border border-stone bg-zinc px-5 py-[18px]"
-        }
+        className={"rounded-[18px] border border-stone bg-zinc px-5 py-[18px]"}
       >
         <div className={"flex items-center justify-between"}>
           <div
@@ -79,7 +77,9 @@ function MarketTrend() {
   return (
     <div className={"flex items-end justify-end flex-col mt-36"}>
       <p className={" font-semibold text-neutral text-xlg"}>Market Trend</p>
-      <div className={"flex items-center mt-6 gap-x-6"}>{showCoin}</div>
+      <div className={"w-full flex items-center justify-end mt-6 gap-x-6"}>
+        {showCoin}
+      </div>
     </div>
   );
 }

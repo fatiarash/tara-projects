@@ -11,20 +11,20 @@ import Xrp from "../../images/coin/xrp.svg";
 import Chart from "../../images/market-trend/chart-state.svg";
 import ChartRed from "../../images/market/chart-red.svg";
 
-function MarketUpdate({ ethereumData, bitcoinData }) {
+function MarketUpdate({ ethereumData, bitcoinData, loading, loadingBtc }) {
   const teampDataTabel = [
-    // {
-    //   coin: "Ethereum",
-    //   abbreviation: "ETH",
-    //   lastPrice: ethereumData,
-    //   change: "2.22%",
-    //   image: Ethereum,
-    //   status: true,
-    // },
+    {
+      coin: "Ethereum",
+      abbreviation: "ETH",
+      lastPrice: ethereumData,
+      change: "2.22%",
+      image: Ethereum,
+      status: true,
+    },
     {
       coin: "Binance",
       abbreviation: "BNB",
-      lastPrice: "$587.74",
+      lastPrice: "587.74",
       change: "-0.82%",
       image: Binance,
       status: true,
@@ -32,7 +32,7 @@ function MarketUpdate({ ethereumData, bitcoinData }) {
     {
       coin: "Tether",
       abbreviation: "USDT",
-      lastPrice: "$0.9998",
+      lastPrice: "0.9998",
       change: "-0.03%",
       image: Tether,
       status: true,
@@ -40,7 +40,7 @@ function MarketUpdate({ ethereumData, bitcoinData }) {
     {
       coin: "Solana",
       abbreviation: "SOL",
-      lastPrice: "$213.67",
+      lastPrice: "213.67",
       change: "-0.53%",
       image: Solana,
       status: false,
@@ -48,7 +48,7 @@ function MarketUpdate({ ethereumData, bitcoinData }) {
     {
       coin: "XRP",
       abbreviation: "XRP",
-      lastPrice: "$1.04",
+      lastPrice: "1.04",
       change: "-0.44%",
       image: Xrp,
       status: false,
@@ -56,7 +56,7 @@ function MarketUpdate({ ethereumData, bitcoinData }) {
     {
       coin: "USD Coin",
       abbreviation: "USDC",
-      lastPrice: "$1.00",
+      lastPrice: "1.00",
       change: "-0.03%",
       image: Usd,
       status: false,
@@ -71,7 +71,7 @@ function MarketUpdate({ ethereumData, bitcoinData }) {
         }
       >
         <p className={"w-[10%] flex justify-end font-medium text-gray text-md"}>
-          {index + 1}
+          {index + 2}
         </p>
         <div className={"w-[30%] flex justify-end items-center gap-[22px]"}>
           <div className={"flex items-center"}>
@@ -81,9 +81,12 @@ function MarketUpdate({ ethereumData, bitcoinData }) {
           <p className={"text-gray text-md"}>{item.coin}</p>
           <img src={item.image} alt={item.coin} />
         </div>
-        <p className={"w-[15%] flex justify-end text-gray text-md"}>
-          {item.lastPrice}
-        </p>
+        {loading && <p>Loading</p>}
+        {!loading && (
+          <p className={"w-[15%] flex justify-end text-gray text-md"}>
+            ${item.lastPrice}
+          </p>
+        )}
         <p
           className={`w-[15%] flex justify-end text-mdd ${
             item.status ? "text-gray" : "text-red"
@@ -196,11 +199,14 @@ function MarketUpdate({ ethereumData, bitcoinData }) {
                 <div className={"h-6 w-px bg-white mr-3"} />
               </div>
               <p className={"text-gray text-md"}>Bitcoin</p>
-              <img src={Bitcoin} alt='bitcoin' />
+              <img src={Bitcoin} alt="bitcoin" />
             </div>
-            <p className={"w-[15%] flex justify-end text-gray text-md"}>
-              {bitcoinData} 
-            </p>
+            {loadingBtc && <p>Loading</p>}
+            {!loadingBtc && (
+              <p className={"w-[15%] flex justify-end text-gray text-md"}>
+                ${bitcoinData}
+              </p>
+            )}
             <p className={`w-[15%] flex justify-end text-mdd text-red`}>
               1.41%
             </p>
